@@ -32,5 +32,4 @@ def pedirEntero(mensaje, min, max):
     return valor
 
 z = pedirEntero("¿Cuál es tu número favorito?", -50, 50)
-
 print(z)
