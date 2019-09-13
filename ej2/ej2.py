@@ -15,15 +15,16 @@ def pedirEntero(mensaje, min, max):
     Si el valor se encuentra entre <min> y <max>, devuelve el <valor>
     """
 
-    mensajeError = 'Por favor, ingrese un valor entre ' + str(min) + ' y ' + str(max) + '.'
+    mensajeError = f'Por favor, ingrese un valor entre {min} y {max}.'
+    mensajeInput = f"{mensaje} [{min} | {max}]:"
 
     while True:
-        valor = input(str(mensaje + ' [' + str(min) + '|' + str(max) + ']: '))
+        valor = input(mensajeInput)
 
-        if valor.isalpha() == True or valor == '' or valor.isspace() == True:
+        if valor.isalpha() == True or valor == '':
             print(mensajeError)
             continue
-
+        
         if (int(valor) >= min) and (int(valor) <= max):
             break
         else:
