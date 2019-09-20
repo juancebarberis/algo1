@@ -10,8 +10,8 @@ COLOR_NORMAL = '\033[0m'
 #Parámetros globales del juego
 
 SNAKE_MAX_LENGHT = 10
-COLUMNAS = 16
-FILAS = 8
+COLUMNAS = 25
+FILAS = 15
 VELOCIDAD = 1
 TIEMPO = 100
 
