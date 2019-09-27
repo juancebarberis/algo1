@@ -13,7 +13,7 @@ SNAKE_MAX_LENGHT = 10       #Largo máximo que puede alcanzar snake.
 TABLERO_SIZE = 20           #Tamaño del tablero (ancho y alto).
 SPEED = 1                   #Tiempo permitido por movimiento.
 TIME = 100                  #Tiempo de juego.
-SNAKE_PART = '#'            #Símbolo que caracteriza a snake.
+SNAKE_SYMBOL = '#'          #Símbolo que caracteriza a snake.
 FRUTA_SYMBOL = '+'          #Símbolo que caracteriza a la fruta.
 
 from terminal import timed_input, clear_terminal
@@ -23,29 +23,53 @@ def main():
     """
     DOCUMENTACIÓN
     """
-    FrutaFil, FrutaCol = generarFruta()
+    fruta = generarFruta()
     movimiento = 'w'
+    movimientoAnterior = 'w'
     posCero  = TABLERO_SIZE // 2
-    snake   = [SNAKE_PART]
-    tablero = generarTablero()
+    snake   = [[posCero, posCero]]
 
     while True:
         clear_terminal()
-        tablero[FrutaFil][FrutaCol] = COLOR_ROJO + FRUTA_SYMBOL + COLOR_NORMAL
+        tablero = generarTablero()
 
-        #Falta hacer que aparezca snake, y todo lo relacionado a su movimiento.
+        snake, fruta = moverSnake(snake, movimiento, movimientoAnterior, fruta)
 
-        imprimirTablero(tablero)
+        if len(snake) == SNAKE_MAX_LENGHT:
+            print('¡Ganaste!')
+            break
 
-        print(f"{movimiento} | {snake}")  #DEBUG ZONE
-        
+        imprimirTablero(tablero, snake, fruta)
+
+        print(f"Actual: {movimiento} | Anterior: {movimientoAnterior} | Snake:{snake} | Fruta:{fruta}")  #DEBUG ZONE
+
         entrada = inputJugada()
         if entrada == False: 
-            break
+            break      
         if not entrada == None: 
+            movimientoAnterior = movimiento            
             movimiento = entrada
 
     print('Gracias por jugar!')
+
+def moverSnake(snake, movimiento, movimientoAnterior, fruta):
+    """"""
+    if movimiento == "w": 
+        snake.insert(0, (snake[0][0] - 1,snake[0][1]))
+    if movimiento == "s":
+        snake.insert(0, (snake[0][0] + 1,snake[0][1]))
+    if movimiento == "a": 
+        snake.insert(0, (snake[0][0],snake[0][1] - 1))
+    if movimiento == "d": 
+        snake.insert(0, (snake[0][0],snake[0][1] + 1))
+
+    if snake[0][0] == fruta[0] and snake[0][1] == fruta[1]: 
+        print('Nueva fruta')
+        fruta = generarFruta()
+    else: 
+        snake.pop(-1)
+        
+    return snake, fruta
 
 def inputJugada():
     """Recibe un input del jugador y comprueba que sea 
@@ -65,10 +89,13 @@ def generarTablero():
             tablero[fil].append('.') 
     return tablero
 
-def imprimirTablero(tablero):
+def imprimirTablero(tablero, snake, fruta):
     """Recibe una lista de listas y lo imprime en forma de tablero (matriz)."""
     print('Controles: [w, a, s, d]')
     print('Salir: [Espacio/Enter]')
+    for coord in snake:             #Agrega Snake al tablero
+        tablero[coord[0]][coord[1]] = COLOR_VERDE + SNAKE_SYMBOL + COLOR_NORMAL
+    tablero[fruta[0]][fruta[1]] = COLOR_ROJO + FRUTA_SYMBOL + COLOR_NORMAL
     for fila in range(TABLERO_SIZE):
             lst = tablero[fila]
             tableroFinal= ""
@@ -85,7 +112,7 @@ def generarFruta():
     frutaCol = randint(0, TABLERO_SIZE - 1)
     frutaFil = randint(0, TABLERO_SIZE - 1)
 
-    return frutaCol, frutaFil
+    return [frutaCol, frutaFil]
 
 
 main()              #Esta línea ejecuta el juego.
