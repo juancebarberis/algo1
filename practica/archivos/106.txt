@@ -1,0 +1,4 @@
+'banana', 3
+'manzana', 4
+'pera', 2
+'uva', 1
