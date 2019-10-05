@@ -1,17 +1,81 @@
-n = 3
-secuencia = [1, "hola", True, None, 'elemento!', 324521] 
-#print([x**2 for x in range(10)])
+import time
+import numpy as np
 
-def f(x):
-    return x ** 3
+from uq_kernel.model import UQModel
+from uq_kernel import monomial_example
 
-def es_par(x):
-    if x % 2 == 0:
-        return True
 
-#print(list([f(x) for x in range(10) if es_par(x)]))
+def simple_serial_engine(models, model_inputs):
+    """
+    Evaluates each of the models at their given inputs one after another.
+    Creating an alternative to this function which executes in parallel and
+    balances loads is one of the goals of the project.
+    :param models: a list of models to evaluate
+    :param model_inputs: a list of inputs corresponding to the models
+    :return: the model outputs at the given inputs
+    """
+    model_outputs = []
+    for model, multiple_inputs in zip(models, model_inputs):
+        multiple_outputs = [model.evaluate(inpt) for inpt in multiple_inputs]
+        model_outputs.append(np.array(multiple_outputs))
+    return model_outputs
 
-#print(list([1 if i == j else 0 for i in range(n)] for j in range(n)))
 
-for i,e in enumerate(secuencia):
-    print(f"Elemento:{e}, Índice:{i}")
+def check_model_execution(engine_function, num_models, max_cost, 
+                          model_cost_ratio, cost_std_ratio, target_cost, 
+                          num_processes=1):
+    """
+    Runs an engine function on a monomial model test case.
+    The parameters max_cost, model_cost_ratio, an cost_std_ratio in this
+    function allow for the adjustment of model run times which can be useful in
+    exploring load balancing.
+    :param engine_function: The function which executes the models; it's
+        arguments are a list of UQModels and list of numpy input arrays and 
+        returns a list of numpy output arrays (see the simple_serial_engine 
+        function above) 
+    :param num_models (int): The number of models to use in execution
+    :param max_cost (float): Cost of the highest cost model, models[0]
+    :param model_cost_ratio (float): Multiplicative model costs for each 
+        successive model
+    :param cost_std_ratio (float): Amount of variation in evaluation time as a
+        fraction of evaluation time
+    :param target_cost (float): The approximate total run cost of the models
+    :param num_processes (int): the number of processes used in execution
+    """
+
+    models = monomial_example.create_models(num_models, max_cost,
+                                            model_cost_ratio,
+                                            cost_std_ratio)
+    model_inputs = monomial_example.get_model_inputs(models,
+                                                     target_cost)
+
+    t_start = time.time()
+    model_outputs = engine_function(models, model_inputs)
+    t_end = time.time()
+
+    success = monomial_example.is_output_correct(models, model_inputs,
+                                                 model_outputs)
+    theoretical_time = monomial_example.get_execution_time(models,
+                                                           model_inputs)
+    theoretical_time /= num_processes
+    actual_time = t_end - t_start
+    efficiency = theoretical_time / actual_time
+
+    print("Engine Check Results:")
+    print("  Output is", "Correct!" if success else "Incorrect!")
+    print("  Theoretical execution time was", theoretical_time)
+    print("  Actual execution time was", actual_time)
+    print("  Efficiency was {:.4f}".format(efficiency))
+
+
+if __name__ == "__main__":
+    NUM_MODELS = 5          # reasonable range [2, 10]
+    MAX_COST = 1.0          # time to run longest model (sec)
+    MODEL_COST_RATIO = 0.1  # reasonable range [0.001, 0.5]
+    COST_STD_RATIO = 0.05   # reasonable range [0.01, 0.2]
+    TARGET_COST = 10        # reasonable range [5, 1000]*MAX_COST
+    EXECUTION_FUNCTION = simple_serial_engine
+
+    np.random.seed(0)
+    check_model_execution(EXECUTION_FUNCTION, NUM_MODELS, MAX_COST,
+                          MODEL_COST_RATIO, COST_STD_RATIO, TARGET_COST)
