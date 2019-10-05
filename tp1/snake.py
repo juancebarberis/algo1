@@ -21,7 +21,7 @@ def main():
     fruta = generarFruta()
     movimiento = 'w'
     posCero  = TABLERO_SIZE // 2
-    snake   = [[posCero, posCero]]
+    snake   = [(posCero, posCero)]
 
     while True:
         clear_terminal()
@@ -66,7 +66,7 @@ def checkFruta(snake, fruta):
     elimina la última pieza de <SNAKE>. De lo contrario, elimina la última pieza de <SNAKE>.
     Devuelve <SNAKE> y <FRUTA>"""
     
-    if snake[0][0] == fruta[0] and snake[0][1] == fruta[1]: 
+    if snake[0] == fruta: 
         fruta = generarFruta()
     else: 
         snake.pop(-1)
@@ -77,9 +77,8 @@ def checkBordes(snake):
     """Recibe <SNAKE>. Comprueba que la nueva posición no esté fuera de los límites
     del tablero. Devuelve <False> en caso de estar fuera de los límites."""
 
-    if snake[0][0] == -1 or snake[0][1] == -1 or snake[0][0] == TABLERO_SIZE or snake[0][1] == TABLERO_SIZE: 
-        return False
-    return True
+    if not (snake[0][0] == -1 or snake[0][1] == -1 or snake[0][0] == TABLERO_SIZE or snake[0][1] == TABLERO_SIZE): 
+        return True
 
 def checkAutoColision(snake):
     """Recibe <SNAKE>. Comprueba que la nueva posición no esté sobre otra parte del
@@ -144,9 +143,9 @@ def imprimirTablero(tablero, snake, fruta):
 def generarFruta():
     """Genera dos coordenadas al azar en un rango hasta <TABLERO_SIZE>.
     Devuelve las coordenadas en una lista."""
-    frutaCol = randint(1, TABLERO_SIZE - 1)
-    frutaFil = randint(1, TABLERO_SIZE - 1)
+    frutaCol = randint(0, TABLERO_SIZE - 1)
+    frutaFil = randint(0, TABLERO_SIZE - 1)
 
-    return [frutaCol, frutaFil]
+    return (frutaCol, frutaFil)
 
 main()              #Esta línea ejecuta el juego.
