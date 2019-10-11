@@ -2,6 +2,10 @@
 
 from modulos.terminal import clear_terminal, timed_input
 
+COLOR_VERDE = '\033[92m'
+COLOR_ROJO = '\033[91m'
+COLOR_NORMAL = '\033[0m'
+
 def jugadorSalir(motivo):
     """
     Limpia la terminal e imprime un mensaje acorde al motivo
@@ -9,13 +13,18 @@ def jugadorSalir(motivo):
     """
     if motivo == 'pressEspace':
         clear_terminal()
-        print('¡Gracias por jugar!')
+        print(f'{COLOR_VERDE}¡Gracias por jugar!{COLOR_NORMAL}')
         return False
 
     if motivo == 'gameOver':
         clear_terminal()
-        print('¡Game Over! :(')
+        print(f'{COLOR_ROJO}¡Game Over! :({COLOR_NORMAL}')
         return False
+    
+    if motivo == 'loadError':
+        print(f'{COLOR_ROJO}Error a la hora de cargar los archivos necesarios para ejecutar el juego.{COLOR_NORMAL}')
+        print(f'Por favor, verifique que la carpeta "/config" cuente con los niveles/especiales con el formato indicado.')
+        print(f'Para más información del formato de niveles/especiales, vea la documentación en el módulo "cargar.py".')
 
 def jugadorNivelUp(nivelActual, ultimoNivel):
     '''

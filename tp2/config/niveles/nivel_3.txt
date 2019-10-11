@@ -1,0 +1,15 @@
+#Largo máximo que puede alcanzar snake.
+SNAKE_MAX_LENGHT:15   
+
+#Tamano del tablero (Columnas y filas).
+TABLERO_COLUMNAS:50
+TABLERO_FILAS:15     
+
+#Tiempo permitido por movimiento.
+SPEED:0.1                 
+
+#Símbolo que caracteriza a snake. Evite valores numéricos.
+SNAKE_SYMBOL:O         
+
+#Símbolo que caracteriza a la fruta. Evite valores numéricos.
+FRUTA_SYMBOL:+ 

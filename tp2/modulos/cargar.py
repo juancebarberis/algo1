@@ -11,7 +11,7 @@ def cargarVariablesNivel():
     '''
     nivel = 1
     variablesDeNivel = []
-    print('Cargando niveles de juego.')
+    print('Cargando niveles de juego...')
     while True:
         try:
             with open('config/niveles/nivel_' + str(nivel) + '.txt', mode='r') as archivoNivel:
@@ -27,14 +27,24 @@ def cargarVariablesNivel():
                         except:
                             dictIndividual[parametro[0]] = parametro[1]
                 variablesDeNivel.append(dictIndividual)
-                print('¡Nivel ' + str(nivel) + ' cargado exitosamente!')
+                print('¡Nivel ' + str(nivel) + ' cargado exitosamente!')   #Solo para DEBUG
                 nivel += 1
         except Exception as e:
             if nivel == 1: 
-                print('No existen niveles cargados en el juego.')
+                print(f'No existen niveles cargados en el juego. {e}')
                 variablesDeNivel = None
             break
-    return variablesDeNivel
+
+    if comprobarKeys(variablesDeNivel):
+        return variablesDeNivel
+
+def comprobarKeys(listaDeDiccionarios):
+    '''
+    Recibe una lista de diccionarios y comprueba que todas las keys
+    necesarias para que el juego funcione, existan.
+    Devuelve False en caso de faltar una key.
+    '''
+    return False
 
 def cargarEspeciales():
     return True

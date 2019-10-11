@@ -37,4 +37,4 @@ def imprimirTablero(tablero, snake, fruta, TABLERO_SIZE, var):
     print('')
     print(f"Posición de la fruta: {fruta}")
     print(f"Tablero: {TABLERO_SIZE}")
-    print(f"Mover:[w, a, s, d] | Salir:[Espacio/Enter]")
+    print(f"{COLOR_VERDE}Mover:{COLOR_NORMAL}[w, a, s, d] | {COLOR_ROJO}Salir:{COLOR_NORMAL}[Espacio/Enter]")

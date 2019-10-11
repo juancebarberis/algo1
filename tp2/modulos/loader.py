@@ -1,5 +1,5 @@
 
-#Modulo de inicialización. 
+#Modulo de carga. 
 #Se encarga de cargar todos los imports necesarios para que el juego funcione.
 
 from random import randint
