@@ -1,12 +1,27 @@
 
 from modulos.generar import generarFruta
 
-def checkBordes(snake, TABLERO_SIZE):
+def checkColision(snake, variables):
     """Recibe <SNAKE>. Comprueba que la nueva posición no esté fuera de los límites
-    del tablero. Devuelve <False> en caso de estar fuera de los límites."""
-
-    if not (snake[0][0] == -1 or snake[0][1] == -1 or snake[0][0] == TABLERO_SIZE[1] or snake[0][1] == TABLERO_SIZE[0]): 
-        return True
+    del tablero o que no colisione contra un obstaculo del nivel.
+     Devuelve <False> en caso de estar fuera de los límites."""
+    TABLERO_SIZE = variables['TABLERO_SIZE']
+    #Comprobación de Snake con los bordes.
+    if snake[0][0] == -1 or snake[0][1] == -1:
+        return False
+    if snake[0][0] == TABLERO_SIZE[1] or snake[0][1] == TABLERO_SIZE[0]:
+        return False
+    #Comprobación de Snake con los obstaculos.
+    try:
+        obstaculos = variables['OBSTACLE'].split(';')
+        for obstaculo in obstaculos:
+                coordObstaculo = obstaculo.split(',')
+                tuplaObstaculo = (int(coordObstaculo[0]), int(coordObstaculo[1]))
+                if snake[0] == tuplaObstaculo:
+                    return False
+    except:
+        obstaculos = None
+    return True
 
 def checkAutoColision(snake):
     """Recibe <SNAKE>. Comprueba que la nueva posición no esté sobre otra parte del
@@ -16,7 +31,7 @@ def checkAutoColision(snake):
         if snake[i] == cabezaSnake: return False
     return True
 
-def checkFruta(snake, fruta, TABLERO_SIZE):
+def checkFruta(snake, fruta, variables):
     """Recibe <SNAKE> con la nueva pieza de movimientoSnake() y la posición de
     la <FRUTA>. Comprueba si la nueva pieza está en la misma posición de la fruta.
     Si las posiciones coinciden, genera una nueva fruta con generarFruta() y no
@@ -24,7 +39,7 @@ def checkFruta(snake, fruta, TABLERO_SIZE):
     Devuelve <SNAKE> y <FRUTA>"""
     
     if snake[0] == fruta: 
-        fruta = generarFruta(TABLERO_SIZE)
+        fruta = generarFruta(variables['TABLERO_SIZE'])
     else: 
         snake.pop(-1)
         

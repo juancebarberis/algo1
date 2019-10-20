@@ -8,7 +8,7 @@ SNAKE_MAX_LENGHT:10
 #Tamano del tablero (Columnas y filas).
 TABLERO_COLUMNAS:30
 TABLERO_FILAS:15     
-
+OBSTACLE:1,2;3,5;3,9;0,79
 #Tiempo permitido por movimiento.
 SPEED:0.2                 
 
