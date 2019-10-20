@@ -1,0 +1,4 @@
+U,VELOCIDAD,-0.1,u,Aumenta la velocidad
+I,VELOCIDAD,0.1,i,Disminuye la velocidad
+%,LARGO,-1,o,Reduce en una unidad a Snake
+*,LARGO,1,p,Aumenta en una unidad a Snake

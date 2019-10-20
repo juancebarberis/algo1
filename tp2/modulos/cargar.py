@@ -1,9 +1,17 @@
 #Modulo que interactua con los archivos del juego. 
 #Niveles y especiales, interactuan con las funciones de este módulo.
 
-KEYS_DE_NIVEL = ['LEVEL', 'SNAKE_MAX_LENGHT', 'TABLERO_COLUMNAS', 'TABLERO_FILAS', 'SPEED', 'SNAKE_SYMBOL', 'FRUTA_SYMBOL']
-
 import csv
+
+KEYS_DE_NIVEL = (   #Keys de nivel que son obligatorias para que el juego funcione.
+    'LEVEL',
+    'SNAKE_MAX_LENGHT',
+    'TABLERO_COLUMNAS',
+    'TABLERO_FILAS',
+    'SPEED',
+    'SNAKE_SYMBOL',
+    'FRUTA_SYMBOL'
+    )
 
 def cargarVariablesNivel():
     '''
@@ -28,35 +36,57 @@ def cargarVariablesNivel():
                             dictIndividual[parametro[0]] = int(parametro[1])
                         except:
                             dictIndividual[parametro[0]] = parametro[1]
+                #Casos especiales.
                 dictIndividual['TABLERO_SIZE'] = (dictIndividual['TABLERO_COLUMNAS'], dictIndividual['TABLERO_FILAS'])
+                try:
+                    dictIndividual['SPECIALS'] = dictIndividual['SPECIALS'].split(',')
+                except:
+                    dictIndividual['SPECIALS'] = []
+                #Fin de casos especiales.
                 variablesDeNivel.append(dictIndividual)
-                print('¡Nivel ' + str(nivel) + ' cargado exitosamente!')   #Solo para DEBUG
                 nivel += 1
         except:
             if nivel == 1: 
                 print(f'No existen niveles cargados en el juego.')
                 return None
             break
-    return variablesDeNivel
+    if comprobarKeys(variablesDeNivel, nivel):
+        return variablesDeNivel
 
-def comprobarKeys(listaDeDiccionarios):
+def comprobarKeys(listaDeDiccionarios, nivel):
     '''
     Recibe una lista de diccionarios y comprueba que todas las keys
     necesarias para que el juego funcione, existan.
     Devuelve False en caso de faltar una key.
     '''
     print(f'Comprobando variables de nivel...')
-    for diccionario in listaDeDiccionarios:
-        _nivel_actual = diccionario['LEVEL']
-        print(f'Nivel {_nivel_actual}')
-        for key in diccionario:
-            for i in range(len(KEYS_DE_NIVEL)):
-                if KEYS_DE_NIVEL[i] == 1:
-                    break
+    for nivel in range(nivel-1):
+        for key in KEYS_DE_NIVEL:
+            if key not in listaDeDiccionarios[nivel]:
+                print(f'Error al cargar {key} en nivel {nivel + 1}')
                 return False
-            print(f'{key} cargado correctamente.')
-    print('Niveles cargados correctamente.')
     return True
 
 def cargarEspeciales():
-    return True
+    '''
+    Realiza la carga inicial de todos los especiales que se encuentran en
+    /config/especiales.csv
+    Devuelve un diccionario de diccionarios, donde la key del diccionario padre
+    es el símbolo del especial.
+    '''
+    especiales = {}
+    cantidadDeFilas = 0
+    with open('config/especiales.csv') as espFile:
+        espRead = csv.reader(espFile)
+        for fila in espRead:
+            cantidadDeFilas += 1
+            especiales[fila[0]]  = {
+                                    'E_SYMBOL': fila[0],
+                                    'E_TYPE': fila[1],
+                                    'E_VALUE': fila[2],
+                                    'E_CANT': 0,
+                                    'E_KEY': fila[3],
+                                    'E_DESC': fila[4],
+                                    }    
+        especiales['TOTAL'] = cantidadDeFilas                           
+    return especiales

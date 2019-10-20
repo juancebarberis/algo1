@@ -7,9 +7,9 @@ COLOR_VERDE = '\033[92m'
 COLOR_ROJO = '\033[91m'
 COLOR_NORMAL = '\033[0m'
 
-def imprimirTablero(snake, fruta, variables):
+def imprimirTablero(snake, fruta, variables, _ESPECIALES, especialTablero):
     """
-    Recibe los componentes del juego (Tablero, Snake y Fruta) y los imprime en el
+    Recibe los componentes del juego y los imprime en el
     orden y posiciones correspondientes.
     """
     tablero = generarTablero(variables['TABLERO_SIZE'])
@@ -33,6 +33,9 @@ def imprimirTablero(snake, fruta, variables):
                 continue
     except:
         obstaculos = None
+    #Agregar especial de tablero
+    if especialTablero:
+        tablero[especialTablero['COORDS'][0]][especialTablero['COORDS'][1]] = especialTablero['SYMBOL']
     #Información superior
     print("SNAKE++")
     print(f"Nivel: {variables['LEVEL']}  |  Tamaño: {len(snake)}")
@@ -46,7 +49,14 @@ def imprimirTablero(snake, fruta, variables):
             print(tableroFinal)
     #Información inferior
     print('')
-    print(f"Posición de la fruta: {fruta}")
-    print(f"Posición de la snake: {snake}")
-    print(f"Tablero: {variables['TABLERO_SIZE']}")
+    print(f"Velocidad: {variables['SPEED']}")
+    print('')
+    print('ESPECIALES:')
+    print('SIMBOLO  ||TECLA ||CANTIDAD ||DESCRIPCION')
+    try:
+        for especial in variables['SPECIALS']:
+            datos = _ESPECIALES[especial]
+            print(f"{especial}        ||{datos['E_KEY']}     ||{datos['E_CANT']}        ||{datos['E_DESC']}")
+    except:    
+        print('No hay especiales para este nivel :(')
     print(f"{COLOR_VERDE}Mover:{COLOR_NORMAL}[w, a, s, d] | {COLOR_ROJO}Salir:{COLOR_NORMAL}[Espacio/Enter]")

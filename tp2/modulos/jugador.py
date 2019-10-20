@@ -1,6 +1,7 @@
 #Este módulo contiene funciones que interactuan directamente con el jugador.
 
 from modulos.terminal import clear_terminal, timed_input
+from modulos.cargar import cargarEspeciales
 
 COLOR_VERDE = '\033[92m'
 COLOR_ROJO = '\033[91m'
@@ -39,3 +40,9 @@ def jugadorNivelUp(nivelActual, ultimoNivel):
     if nivelActual == ultimoNivel: 
         return False
     return True
+
+def jugadorLimpiarEspeciales(especiales):
+    '''
+    Limpia la cantidad de especiales disponibles para el siguiente nivel.
+    '''
+    return cargarEspeciales()

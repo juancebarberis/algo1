@@ -10,9 +10,11 @@ TABLERO_FILAS:10
 #Obstaculos que aparecen en el tablero 'x1,y1;x2,y2;...'.
 OBSTACLE:3,4;3,5;3,6;3,7;5,8
 #Tiempo permitido por movimiento.
-SPEED:0.5                 
+SPEED:1          
 #Símbolo que caracteriza a snake.
 SNAKE_SYMBOL:O          
 #Símbolo que caracteriza a la fruta.
 FRUTA_SYMBOL:#        
+#Especiales (Simbolo)
+SPECIALS:U,*
 

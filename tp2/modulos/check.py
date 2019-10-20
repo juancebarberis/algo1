@@ -1,5 +1,5 @@
 
-from modulos.generar import generarFruta
+from modulos.generar import generarFruta, generarEspecial
 
 def checkColision(snake, variables):
     """Recibe <SNAKE>. Comprueba que la nueva posición no esté fuera de los límites
@@ -39,8 +39,24 @@ def checkFruta(snake, fruta, variables):
     Devuelve <SNAKE> y <FRUTA>"""
     
     if snake[0] == fruta: 
-        fruta = generarFruta(variables['TABLERO_SIZE'])
+        fruta = generarFruta(variables)
     else: 
         snake.pop(-1)
         
     return snake, fruta
+
+def checkEspecialTablero(snake, especialTablero, especiales, variables, fruta):
+    '''
+    Comprueba que Snake haya activado un especial, de ser así, genera un nuevo especialTablero
+    y agrega una unidad al especial correspondiente.
+    '''
+    if not especialTablero: #Si el nivel no tiene especiales
+        return snake, especialTablero, especiales
+    
+    if snake[0] == especialTablero['COORDS']:
+        cantidad = int(especiales[especialTablero['SYMBOL']]['E_CANT']) 
+        cantidad += 1
+        especiales[especialTablero['SYMBOL']]['E_CANT'] = str(cantidad)
+        especialTablero = generarEspecial(variables, especiales, fruta)
+    return snake, especialTablero, especiales
+

@@ -11,14 +11,14 @@ def main():
     if _VARIABLES == None or _ESPECIALES == None: 
         return jugadorSalir('loadError')  
     cantidadNiveles = len(_VARIABLES)
-    #cantidadEspeciales = len(_ESPECIALES)        #¡No todavía!
     nivel = 0
     state = True
 
     while state == True:    #Ciclo de juego.
         #Variables iniciales de cada nivel.
         variables = _VARIABLES[nivel]  #Carga el diccionario del nivel correspondiente.
-        fruta = generarFruta(variables['TABLERO_SIZE'])
+        fruta = generarFruta(variables)
+        especialTablero = generarEspecial(variables, _ESPECIALES, fruta)
         movimiento = 'w'
         TABLERO_SIZE = variables['TABLERO_SIZE']
         posCeroCol  = TABLERO_SIZE[0] // 2
@@ -28,6 +28,7 @@ def main():
         while True:     #Ciclo de nivel.
 
             snake, fruta = checkFruta(movimientoSnake(snake, movimiento), fruta, variables)
+            snake, especialTablero, _ESPECIALES = checkEspecialTablero(snake, especialTablero, _ESPECIALES, variables, fruta)
             #Comprobación de colisiones de snake con el entorno.
             if not checkColision(snake, variables) or not checkAutoColision(snake):
                 state = jugadorSalir('gameOver')
@@ -35,12 +36,13 @@ def main():
             #Comprobación de nivel.
             if len(snake) == variables['SNAKE_MAX_LENGHT']:
                 state = jugadorNivelUp(nivel + 1, cantidadNiveles)
+                _ESPECIALES = jugadorLimpiarEspeciales(_ESPECIALES)
                 nivel += 1
                 break
             #Impresión general.
-            imprimirTablero(snake, fruta, variables)
-            #Comprobación de entradas por teclado.
-            entrada = inputJugada(movimiento, float(variables['SPEED']))
+            imprimirTablero(snake, fruta, variables, _ESPECIALES, especialTablero)
+            #Entradas por teclado.
+            entrada, variables, snake, _ESPECIALES = inputJugada(movimiento, variables, _ESPECIALES, snake)
             if entrada == False:     
                 state = jugadorSalir('pressEspace') 
                 break    
@@ -49,6 +51,13 @@ def main():
 
     if nivel > 0:
         print(f'Usted alcanzó hasta el nivel {nivel + 1}')
-    print('Gracias por jugar.')
+        print('Gracias por jugar.')
 
-main()              #Esta línea ejecuta el juego.
+try:
+    main()            #Esta línea ejecuta el juego.
+except KeyboardInterrupt:
+    clear_terminal()
+except Exception as e:
+    print(f'Algo salió mal...')
+    print(f'Reporte el siguiente error: {e}')
+    print('a juancebarberis@gmail.com')
