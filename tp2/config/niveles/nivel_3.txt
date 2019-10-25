@@ -12,6 +12,6 @@ SPEED:0.5
 SNAKE_SYMBOL:O         
 
 #Símbolo que caracteriza a la fruta. Evite valores numéricos.
-FRUTA_SYMBOL:#
+FRUTA_SYMBOL:+
 
 SPECIALS:I

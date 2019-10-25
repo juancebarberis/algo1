@@ -8,13 +8,13 @@ SNAKE_MAX_LENGHT:5
 TABLERO_COLUMNAS:20
 TABLERO_FILAS:10     
 #Obstaculos que aparecen en el tablero 'x1,y1;x2,y2;...'.
-OBSTACLE:3,4;3,5;3,6;3,7;5,8
+OBSTACLE:3,4;3,5;3,6;3,7;3,8;4,8;4,9;5,8;5,9;1,1;1,9
 #Tiempo permitido por movimiento.
 SPEED:1          
 #Símbolo que caracteriza a snake.
 SNAKE_SYMBOL:O          
 #Símbolo que caracteriza a la fruta.
-FRUTA_SYMBOL:#        
+FRUTA_SYMBOL:+        
 #Especiales (Simbolo)
 SPECIALS:U,*
 

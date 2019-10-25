@@ -16,6 +16,6 @@ SPEED:0.6
 SNAKE_SYMBOL:O          
 
 #Símbolo que caracteriza a la fruta.
-FRUTA_SYMBOL:# 
+FRUTA_SYMBOL:+
 
 SPECIALS:I,%,U

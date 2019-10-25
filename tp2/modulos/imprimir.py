@@ -6,6 +6,8 @@ from modulos.generar import generarTablero
 COLOR_VERDE = '\033[92m'
 COLOR_ROJO = '\033[91m'
 COLOR_NORMAL = '\033[0m'
+COLOR_AMARILLO = '\033[93m'
+COLOR_AZUL = '\033[94m'
 
 def imprimirTablero(snake, fruta, variables, _ESPECIALES, especialTablero):
     """
@@ -28,18 +30,17 @@ def imprimirTablero(snake, fruta, variables, _ESPECIALES, especialTablero):
         for obstaculo in obstaculos:
             coordenadasObstaculo = obstaculo.split(',')
             try:
-                tablero[int(coordenadasObstaculo[0])][int(coordenadasObstaculo[1])] = '@'
+                tablero[int(coordenadasObstaculo[0])][int(coordenadasObstaculo[1])] = COLOR_AZUL + '#' + COLOR_NORMAL
             except:
                 continue
     except:
         obstaculos = None
     #Agregar especial de tablero
     if especialTablero:
-        tablero[especialTablero['COORDS'][0]][especialTablero['COORDS'][1]] = especialTablero['SYMBOL']
+        tablero[especialTablero['COORDS'][0]][especialTablero['COORDS'][1]] = COLOR_AMARILLO + especialTablero['SYMBOL'] + COLOR_NORMAL
     #Información superior
     print("SNAKE++")
     print(f"Nivel: {variables['LEVEL']}  |  Tamaño: {len(snake)}")
-    print('')
     #Impresión final del tablero
     for fila in range(variables['TABLERO_SIZE'][1]): 
             lst = tablero[fila]
