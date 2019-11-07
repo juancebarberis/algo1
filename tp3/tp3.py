@@ -60,7 +60,6 @@ class Vista(tk.Canvas):
             x = c * Vista.TAM_CELDA_PX
             y = f * Vista.TAM_CELDA_PX
             self.create_rectangle((x, y, x + Vista.TAM_CELDA_PX, y + Vista.TAM_CELDA_PX), fill=color, outline="")
-
     def coord_px_a_celda(self, x, y):
         return Coord(int(y // Vista.TAM_CELDA_PX), int(x // Vista.TAM_CELDA_PX))
 

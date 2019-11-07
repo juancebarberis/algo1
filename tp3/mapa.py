@@ -13,7 +13,8 @@ class Coord:
         Argumentos:
             fila, columna (int): Coordenadas de la celda
         """
-        raise NotImplementedError()
+        self.fila = fila
+        self.columna = columna 
 
     def trasladar(self, df, dc):
         """Trasladar una celda.
@@ -43,7 +44,8 @@ class Coord:
 
     def __eq__(self, otra):
         """Determina si dos coordenadas son iguales"""
-        raise NotImplementedError()
+        coord = (self.fila, self.columna)
+        return coord == otra
 
     def __iter__(self):
         """Iterar las componentes de la coordenada.
@@ -62,11 +64,11 @@ class Coord:
         # un número entero.
         # Más información (y un ejemplo de cómo implementar la funcion) en:
         # https://docs.python.org/3/reference/datamodel.html#object.__hash__
-        raise NotImplementedError()
+        return hash((self.fila, self.columna))
 
     def __repr__(self):
         """Representación de la coordenada como cadena de texto"""
-        raise NotImplementedError()
+        return f"Coord: ({self.fila},{self.columna})"
 
 class Mapa:
     """
@@ -88,7 +90,12 @@ class Mapa:
         Argumentos:
             filas, columnas (int): Tamaño del mapa
         """
-        raise NotImplementedError()
+        self.filas = filas
+        self.columnas = columnas
+        self.coords = []
+        self.bloqueadas = []
+        #self.origen = Coord(1, 1)
+        #self.destino = Coord(self.filas - 2, self.columnas - 2)
 
     def dimension(self):
         """Dimensiones del mapa (filas y columnas).
@@ -96,7 +103,7 @@ class Mapa:
         Devuelve:
             (int, int): Cantidad de filas y columnas
         """
-        raise NotImplementedError()
+        return (self.filas, self.columnas)
 
     def origen(self):
         """Celda origen.
@@ -104,7 +111,8 @@ class Mapa:
         Devuelve:
             Coord: Las coordenadas de la celda origen
         """
-        raise NotImplementedError()
+        #coord = (self.origen.fila, self.origen.columna)
+        return (1, 1)
 
     def destino(self):
         """Celda destino.
@@ -112,7 +120,8 @@ class Mapa:
         Devuelve:
             Coord: Las coordenadas de la celda destino
         """
-        raise NotImplementedError()
+        #coord = (self.destino.fila, self.destino.columna)
+        return (self.filas - 2, self.columnas - 2)
 
     def asignar_origen(self, coord):
         """Asignar la celda origen.
@@ -120,6 +129,7 @@ class Mapa:
         Argumentos:
             coord (Coord): Coordenadas de la celda origen
         """
+        
         raise NotImplementedError()
 
     def asignar_destino(self, coord):
@@ -139,7 +149,7 @@ class Mapa:
         Devuelve:
             bool: True si la celda está bloqueada
         """
-        raise NotImplementedError()
+        return coord in self.bloqueadas
 
     def bloquear(self, coord):
         """Bloquear una celda.
@@ -149,7 +159,8 @@ class Mapa:
         Argumentos:
             coord (Coord): Coordenadas de la celda a bloquear
         """
-        raise NotImplementedError()
+        if coord not in self.bloqueadas:
+            self.bloqueadas.append(coord)
 
     def desbloquear(self, coord):
         """Desbloquear una celda.
@@ -159,7 +170,8 @@ class Mapa:
         Argumentos:
             coord (Coord): Coordenadas de la celda a desbloquear
         """
-        raise NotImplementedError()
+        if coord in self.bloqueadas:
+            self.bloqueadas.remove(coord)
 
     def alternar_bloque(self, coord):
         """Alternar entre celda bloqueada y desbloqueada.
@@ -169,7 +181,10 @@ class Mapa:
         Argumentos:
             coord (Coord): Coordenadas de la celda a alternar
         """
-        raise NotImplementedError()
+        if coord in self.bloqueadas:
+            self.bloqueadas.remove(coord)
+        else:
+            self.bloqueadas.append(coord)
 
     def es_coord_valida(self, coord):
         """¿Las coordenadas están dentro del mapa?
@@ -206,4 +221,14 @@ class Mapa:
             >>> for coord in mapa:
             >>>     print(coord, mapa.celda_bloqueada(coord))
         """
-        raise NotImplementedError()
+        self.n = 0
+        return self
+        
+    def __next__(self):
+        self.cantidad_coordenadas = len(self.coords) - 1
+        self.n += 1
+        if self.n <= self.cantidad_coordenadas:
+            coord = self.coords[self.n]
+            return (coord.fila, coord.columna)
+        else:
+            raise StopIteration        
