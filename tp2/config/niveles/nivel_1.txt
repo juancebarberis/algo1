@@ -3,7 +3,7 @@
 #[varible:valor]
 
 #Largo máximo que puede alcanzar snake.
-SNAKE_MAX_LENGHT:5      
+SNAKE_MAX_LENGHT:5     
 #Tamano del tablero (Columnas y filas).
 TABLERO_COLUMNAS:20
 TABLERO_FILAS:10     

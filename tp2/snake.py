@@ -52,7 +52,8 @@ def main():
     if nivel > 0:
         print(f'Usted alcanzó hasta el nivel {nivel + 1}')
         print('Gracias por jugar.')
-
+main()
+'''
 try:
     main()            #Esta línea ejecuta el juego.
 except KeyboardInterrupt:
@@ -61,3 +62,4 @@ except Exception as e:
     print(f'Algo salió mal...')
     print(f'Reporte el siguiente error: {e}')
     print('a juancebarberis@gmail.com')
+'''    

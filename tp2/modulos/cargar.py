@@ -18,6 +18,8 @@ def cargarVariablesNivel():
     Realiza la carga inicial de todos los niveles del juego
     y los devuelve en una lista de diccionarios.
     Cada diccionario en la lista representa a un nivel.
+    Si ocurre un error a la hora de cargar algún nivel, o alguna clave
+    no se cargó correctamente, devuelve None.
     '''
     nivel = 1
     variablesDeNivel = []
@@ -34,14 +36,24 @@ def cargarVariablesNivel():
                         parametro = l.split(':')
                         try:
                             dictIndividual[parametro[0]] = int(parametro[1])
-                        except:
+                        except ValueError:
                             dictIndividual[parametro[0]] = parametro[1]
                 #Casos especiales.
+                #Tablero Size
                 dictIndividual['TABLERO_SIZE'] = (dictIndividual['TABLERO_COLUMNAS'], dictIndividual['TABLERO_FILAS'])
+                #Especiales del nivel
                 try:
                     dictIndividual['SPECIALS'] = dictIndividual['SPECIALS'].split(',')
-                except:
+                except KeyError:
                     dictIndividual['SPECIALS'] = []
+                #Obstaculos
+                obstaculos = dictIndividual['OBSTACLE'].split(';')
+                obstaculosFinal = []
+                for obstaculo in obstaculos:
+                    coordObstaculo = obstaculo.split(',')
+                    tuplaObstaculo = (int(coordObstaculo[0]), int(coordObstaculo[1]))
+                    obstaculosFinal.append(tuplaObstaculo)
+                dictIndividual['OBSTACLE'] = obstaculosFinal
                 #Fin de casos especiales.
                 variablesDeNivel.append(dictIndividual)
                 nivel += 1
@@ -75,11 +87,11 @@ def cargarEspeciales():
     es el símbolo del especial.
     '''
     especiales = {}
-    cantidadDeFilas = 0
+    #cantidadDeFilas = 0
     with open('config/especiales.csv') as espFile:
         espRead = csv.reader(espFile)
         for fila in espRead:
-            cantidadDeFilas += 1
+            #cantidadDeFilas += 1
             especiales[fila[0]]  = {
                                     'E_SYMBOL': fila[0],
                                     'E_TYPE': fila[1],
@@ -88,5 +100,5 @@ def cargarEspeciales():
                                     'E_KEY': fila[3],
                                     'E_DESC': fila[4],
                                     }    
-        especiales['TOTAL'] = cantidadDeFilas                           
+        #especiales['TOTAL'] = cantidadDeFilas                         
     return especiales

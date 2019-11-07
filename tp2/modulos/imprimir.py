@@ -1,13 +1,22 @@
-#Funciones que imprimer los elementos visibles del juego
+#Funciones que imprimen los elementos visibles del juego
 
 from modulos.terminal import clear_terminal
-from modulos.generar import generarTablero
 
 COLOR_VERDE = '\033[92m'
 COLOR_ROJO = '\033[91m'
 COLOR_NORMAL = '\033[0m'
 COLOR_AMARILLO = '\033[93m'
 COLOR_AZUL = '\033[94m'
+
+def generarTablero(TABLERO_SIZE):
+    """Genera el tablero base de juego a partir de <TABLERO_SIZE>
+    que recibe en forma de tupla."""
+    tablero = []
+    for fil in range(TABLERO_SIZE[1]):
+        tablero.append([])
+        for col in range(TABLERO_SIZE[0]):
+            tablero[fil].append('.') 
+    return tablero
 
 def imprimirTablero(snake, fruta, variables, _ESPECIALES, especialTablero):
     """
@@ -20,21 +29,16 @@ def imprimirTablero(snake, fruta, variables, _ESPECIALES, especialTablero):
     for coord in snake:             
         tablero[coord[0]][coord[1]] = COLOR_VERDE + variables['SNAKE_SYMBOL'] + COLOR_NORMAL
     #Agrega la fruta al tablero
-    try:
-        tablero[fruta[0]][fruta[1]] = COLOR_ROJO + variables['FRUTA_SYMBOL'] + COLOR_NORMAL  
-    except:
-        print('Error al colocar la fruta.')
+    tablero[fruta[0]][fruta[1]] = COLOR_ROJO + variables['FRUTA_SYMBOL'] + COLOR_NORMAL  
     #Agregar Obstaculos al tablero
     try:
-        obstaculos = variables['OBSTACLE'].split(';')
-        for obstaculo in obstaculos:
-            coordenadasObstaculo = obstaculo.split(',')
-            try:
-                tablero[int(coordenadasObstaculo[0])][int(coordenadasObstaculo[1])] = COLOR_AZUL + '#' + COLOR_NORMAL
-            except:
-                continue
-    except:
-        obstaculos = None
+        #exit(variables['OBSTACLE'])
+        for obstaculo in variables['OBSTACLE']:
+            tablero[obstaculo[0]][obstaculo[1]] = COLOR_AZUL + '#' + COLOR_NORMAL
+    except KeyError:
+        pass
+    except IndexError:
+        pass
     #Agregar especial de tablero
     if especialTablero:
         tablero[especialTablero['COORDS'][0]][especialTablero['COORDS'][1]] = COLOR_AMARILLO + especialTablero['SYMBOL'] + COLOR_NORMAL
