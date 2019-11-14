@@ -3,6 +3,7 @@
 Recordar de volver a activar los obstaculos.
 
 Módulo: cargar.
+
 - (Línea 21 - cargarVariablesNivel) Documentación de la función mejorada.
 - (Línea 39 - cargarVariablesNivel) Except ahora espera un ValueError.
 - (Línea 41 - cargarVariablesNivel) Ahora la variables OBSTACLE del diccionario de cada nivel, realiza un .split() inicial y guarda nuevamente los obstaculos del nivel en una lista de tuplas. También se revisó la documentación.

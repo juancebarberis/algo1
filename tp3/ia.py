@@ -1,3 +1,6 @@
+from random import randint
+from mapa import *
+
 class IA:
     """
     Inteligencia artificial para resolver un laberinto.
@@ -22,7 +25,11 @@ class IA:
         Argumentos:
             mapa (Mapa): El mapa con el laberinto a resolver
         """
-        raise NotImplementedError()
+        self.mapa = mapa
+        self.bloquedas = self.mapa.bloqueadas
+        self.jugador = self.mapa.origen()
+        self.visitadas = []
+        self.caminito = []
 
     def coord_jugador(self):
         """Coordenadas del "jugador".
@@ -43,7 +50,7 @@ class IA:
             >>> ia.coord_jugador()
             Coord(2, 0)
         """
-        raise NotImplementedError()
+        return self.jugador
 
     def visitados(self):
         """Celdas visitadas.
@@ -61,7 +68,7 @@ class IA:
             >>> ia.visitados()
             [Coord(0, 0), Coord(1, 0),  Coord(2, 0)]
         """
-        raise NotImplementedError()
+        return self.visitadas
 
     def camino(self):
         """Camino principal calculado.
@@ -85,7 +92,7 @@ class IA:
             lista devuelta (esto tal vez permite simplificar la
             implementación).
         """
-        raise NotImplementedError()
+        return self.caminito
 
     def avanzar(self):
         """Avanza un paso en la simulación.
@@ -93,5 +100,26 @@ class IA:
         Si el jugador no está en la celda destino, y hay algún movimiento
         posible hacia una celda no visitada, se efectúa ese movimiento.
         """
-        raise NotImplementedError()
+        if self.coord_jugador() != self.mapa.destino():
+            celdas_posibles = {}    #Celdas a las que se puede mover la simulación
+            celdas_posibles[1] = Coord(self.jugador.fila + 1, self.jugador.columna)
+            celdas_posibles[2] = Coord(self.jugador.fila - 1, self.jugador.columna)
+            celdas_posibles[3] = Coord(self.jugador.fila, self.jugador.columna + 1)
+            celdas_posibles[4] = Coord(self.jugador.fila, self.jugador.columna - 1)
+            
+            celdas_validas = []   
+            for clave in celdas_posibles:
+                if celdas_posibles[clave] not in self.bloquedas and celdas_posibles[clave] not in self.visitadas:
+                    celdas_validas.append(celdas_posibles[clave])
+            
+            if len(celdas_validas) == 0:    #Si no hay movimientos válidos
+                self.jugador = self.caminito.pop()
+            else:
+                movimiento = randint(0, len(celdas_validas) - 1)
+                self.caminito.append(self.jugador)
+                self.jugador = celdas_validas[movimiento]
+            self.visitadas.append(self.jugador)
+
+        if self.coord_jugador() == self.mapa.destino():
+            return
 

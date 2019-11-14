@@ -29,7 +29,7 @@ class Coord:
         Devuelve:
             Coord: Las coordenadas de la celda trasladada
         """
-        raise NotImplementedError()
+        return Coord(self.fila + df, self.columna + dc)
 
     def distancia(self, otra):
         """Distancia entre dos celdas.
@@ -40,7 +40,7 @@ class Coord:
         Devuelve:
             int|float: La distancia entre las dos celdas (no negativo)
         """
-        raise NotImplementedError()
+        return ((self.fila - otra[0])**2 + (self.columna - otra[1])**2) ** 0.5
 
     def __eq__(self, otra):
         """Determina si dos coordenadas son iguales"""
@@ -56,6 +56,7 @@ class Coord:
         >>> assert f == 3
         >>> assert c == 5
         """
+        #No vimos la necesidad de implementar el método en ninguna parte del programa.
         raise NotImplementedError()
 
     def __hash__(self):
@@ -94,8 +95,10 @@ class Mapa:
         self.columnas = columnas
         self.coords = []
         self.bloqueadas = []
-        #self.origen = Coord(1, 1)
-        #self.destino = Coord(self.filas - 2, self.columnas - 2)
+        self.vecinas = []
+        self.invalidos = []
+        self.coord_origen = Coord(1, 1)
+        self.coord_destino = Coord(self.filas - 2, self.columnas - 2)
 
     def dimension(self):
         """Dimensiones del mapa (filas y columnas).
@@ -111,8 +114,7 @@ class Mapa:
         Devuelve:
             Coord: Las coordenadas de la celda origen
         """
-        #coord = (self.origen.fila, self.origen.columna)
-        return (1, 1)
+        return self.coord_origen
 
     def destino(self):
         """Celda destino.
@@ -120,8 +122,7 @@ class Mapa:
         Devuelve:
             Coord: Las coordenadas de la celda destino
         """
-        #coord = (self.destino.fila, self.destino.columna)
-        return (self.filas - 2, self.columnas - 2)
+        return self.coord_destino
 
     def asignar_origen(self, coord):
         """Asignar la celda origen.
@@ -129,8 +130,7 @@ class Mapa:
         Argumentos:
             coord (Coord): Coordenadas de la celda origen
         """
-        
-        raise NotImplementedError()
+        self.coord_origen = coord
 
     def asignar_destino(self, coord):
         """Asignar la celda destino.
@@ -138,7 +138,7 @@ class Mapa:
         Argumentos:
             coord (Coord): Coordenadas de la celda destino
         """
-        raise NotImplementedError()
+        self.coord_destino = coord
 
     def celda_bloqueada(self, coord):
         """¿La celda está bloqueada?
@@ -181,6 +181,8 @@ class Mapa:
         Argumentos:
             coord (Coord): Coordenadas de la celda a alternar
         """
+        if not self.es_coord_valida(coord):
+            return
         if coord in self.bloqueadas:
             self.bloqueadas.remove(coord)
         else:
@@ -195,7 +197,7 @@ class Mapa:
         Devuelve:
             bool: True si las coordenadas corresponden a una celda dentro del mapa
         """
-        raise NotImplementedError()
+        return coord in self.coords and coord not in self.invalidos
 
     def trasladar_coord(self, coord, df, dc):
         """Trasladar una coordenada, si es posible.
@@ -208,7 +210,11 @@ class Mapa:
             Coord: La coordenada trasladada si queda dentro del mapa. En caso
                    contrario, devuelve la coordenada recibida.
         """
-        raise NotImplementedError()
+        nueva_coordenada = coord.trasladar(df, dc)
+        if nueva_coordenada in self.bloqueadas:
+            return coord
+        return nueva_coordenada
+
 
     def __iter__(self):
         """Iterar por las coordenadas de todas las celdas del mapa.
