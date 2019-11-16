@@ -1,3 +1,9 @@
+#MATERIA = ALGORITMOS Y PROGRAMACION I (ESSAYA)
+#GRUPO = B7 (GUTIERREZ, BARBERIS)
+#CORRECTOR = JAVIER DI SANTO
+#TP3 - BACKTRACKING
+#2C 2019
+
 class Coord:
     """
     Representa las coordenadas de una celda en una grilla 2D, representada
