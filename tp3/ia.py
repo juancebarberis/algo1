@@ -34,7 +34,7 @@ class IA:
         self.mapa = mapa
         self.bloquedas = self.mapa.bloqueadas
         self.jugador = self.mapa.origen()
-        self.visitadas = []
+        self.visitadas = {}
         self.caminito = []
 
     def coord_jugador(self):
@@ -107,16 +107,16 @@ class IA:
         posible hacia una celda no visitada, se efectúa ese movimiento.
         """
         if self.coord_jugador() != self.mapa.destino():
-            celdas_posibles = {}    #Celdas a las que se puede mover la simulación
-            celdas_posibles[1] = Coord(self.jugador.fila + 1, self.jugador.columna)
-            celdas_posibles[2] = Coord(self.jugador.fila - 1, self.jugador.columna)
-            celdas_posibles[3] = Coord(self.jugador.fila, self.jugador.columna + 1)
-            celdas_posibles[4] = Coord(self.jugador.fila, self.jugador.columna - 1)
+            celdas_posibles = []    #Celdas a las que se puede mover la simulación
+            celdas_posibles.append(Coord(self.jugador.fila + 1, self.jugador.columna))
+            celdas_posibles.append(Coord(self.jugador.fila - 1, self.jugador.columna))
+            celdas_posibles.append(Coord(self.jugador.fila, self.jugador.columna + 1))
+            celdas_posibles.append(Coord(self.jugador.fila, self.jugador.columna - 1))
             
             celdas_validas = []   
-            for clave in celdas_posibles:
-                if celdas_posibles[clave] not in self.bloquedas and celdas_posibles[clave] not in self.visitadas:
-                    celdas_validas.append(celdas_posibles[clave])
+            for coord in celdas_posibles:
+                if coord not in self.bloquedas and coord not in self.visitadas:
+                    celdas_validas.append(coord)
             
             if len(celdas_validas) == 0:    #Si no hay movimientos válidos
                 self.jugador = self.caminito.pop()
@@ -124,7 +124,7 @@ class IA:
                 movimiento = randint(0, len(celdas_validas) - 1)
                 self.caminito.append(self.jugador)
                 self.jugador = celdas_validas[movimiento]
-            self.visitadas.append(self.jugador)
+            self.visitadas[self.jugador] = True
 
         if self.coord_jugador() == self.mapa.destino():
             return

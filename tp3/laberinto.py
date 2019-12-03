@@ -13,42 +13,37 @@ def generar_laberinto(filas, columnas):
     """
     
     mapa = Mapa(filas, columnas)
+    vecinas = []
+    for coord_instancia in mapa: 
+        if coord_instancia.fila % 2 != 0 and coord_instancia.columna % 2 != 0:  #Celdas vecinas, todas las celdas impares
+            vecinas.append(coord_instancia)
     
-    for fila in range(filas):
-            for columna in range(columnas):
-                coord_instancia = Coord(fila, columna)
-                mapa.coords.append(coord_instancia)
-                if fila in (0, filas - 1) or columna in (0, columnas - 1):  #Comprobación de bordes del mapa
-                    mapa.invalidos.append(coord_instancia)
-                if fila % 2 != 0 and columna % 2 != 0:  #Celdas vecinas, todas las celdas impares
-                    mapa.vecinas.append(coord_instancia)
-                mapa.bloqueadas.append(coord_instancia) #Bloqueo de todas las coordenadas
-    
-    mapa = generar(mapa, mapa.vecinas[0])
+    mapa = generar(mapa, vecinas[0], vecinas)
     return mapa
 
-def generar(mapa, coord_actual):
+def generar(mapa, coord_actual,vecinas):
     '''
     Algoritmo que utiliza Backtracking para generar un laberinto, sin dejar espacios
     vacíos (de celdas impares) y tiene siempre solución.
     '''
     pila_actual = []
-    while len(mapa.vecinas) > 0:    #Mientras no hayan celdas vecinas sin visitar
+    while len(vecinas) > 0:    #Mientras no hayan celdas vecinas sin visitar
         mapa.desbloquear(coord_actual)
-        for vecina in mapa.vecinas:
+        for vecina in vecinas:
             if vecina == coord_actual:
-                mapa.vecinas.remove(vecina)
-        if len(mapa.vecinas) > 0:
-            vecinas_locales = {}    #Celdas vecinas relativas a coord_actual
-            vecinas_locales[1] = Coord(coord_actual.fila + 2, coord_actual.columna)
-            vecinas_locales[2] = Coord(coord_actual.fila - 2, coord_actual.columna)
-            vecinas_locales[3] = Coord(coord_actual.fila, coord_actual.columna + 2)
-            vecinas_locales[4] = Coord(coord_actual.fila, coord_actual.columna - 2)
+                vecinas.remove(vecina)
+        if len(vecinas) > 0:
+            vecinas_locales = []    #Celdas vecinas relativas a coord_actual
+            vecinas_locales.append(Coord(coord_actual.fila + 2, coord_actual.columna))
+            vecinas_locales.append(Coord(coord_actual.fila - 2, coord_actual.columna))
+            vecinas_locales.append(Coord(coord_actual.fila, coord_actual.columna + 2))
+            vecinas_locales.append(Coord(coord_actual.fila, coord_actual.columna - 2))
+            
             vecinas_stack = []
             #Comprueba que las celdas vecinas estén bloquedas y estén dentro del mapa.
-            for key in vecinas_locales:
-                if vecinas_locales[key] in mapa.bloqueadas and vecinas_locales[key] not in mapa.invalidos:
-                    vecinas_stack.append(vecinas_locales[key])
+            for coordenada in vecinas_locales:
+                if mapa.celda_bloqueada(coordenada) and mapa.es_coord_valida(coordenada):
+                    vecinas_stack.append(coordenada)
         
             if len(vecinas_stack) >= 1:
                 vecina_random = randint(0, len(vecinas_stack) - 1)
@@ -64,5 +59,6 @@ def generar(mapa, coord_actual):
             
             elif len(pila_actual) is not 0: 
                 coord_actual = pila_actual.pop()
+
     return mapa
     

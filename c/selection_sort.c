@@ -19,7 +19,7 @@ void selection(int longitud, int * arreglo){
 		arreglo[pos_actual] = temporal_final;
 		longitud -= 1;
 	}
-	printf("Arreglo ordenado\n");
+	printf("Sorted\n");
 	for(int j = 0; j != 10; j++){
 		printf("[%d]", arreglo[j]);
 	}
@@ -28,9 +28,9 @@ void selection(int longitud, int * arreglo){
 
 int main()
 {
-	int arreglo[] = {1, 5, 6, 2, 12, 10, 3, 2, 9, 8};
+	int arreglo[] = {1, 5, 6, -2, 12, 10, 3, 2, 9, 8};
 	int longitud = 9;
-	printf("Arreglo desordenado\n");
+	printf("Unsorted\n");
 	for(int j = 0; j != 10; j++){
 		printf("[%d]", arreglo[j]);
 	}
